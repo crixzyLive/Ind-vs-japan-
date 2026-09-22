@@ -125,7 +125,7 @@
     #ctrls{position:absolute;bottom:0;left:0;right:0;z-index:20;transition:opacity .3s ease,transform .3s ease;}
     #ctrls.gone{opacity:0;pointer-events:none;transform:translateY(8px);}
 
-    /* iOS 16 scrubber */
+    /* Scrubber */
     #prog{margin:0 14px 6px;height:26px;display:flex;align-items:center;cursor:pointer;position:relative;}
     .pt{position:relative;height:4px;width:100%;background:rgba(255,255,255,.22);border-radius:4px;overflow:visible;transition:height .15s var(--ease-sheet);}
     #prog:hover .pt,#prog.drag .pt{height:8px;}
@@ -138,7 +138,7 @@
     }
     #prog:hover .pth,#prog.drag .pth{opacity:1;transform:translate(-50%,-50%) scale(1.15);}
 
-    /* Control bar — blurred scrim */
+    /* Control bar */
     #crow{
       display:flex;align-items:center;
       padding:6px 12px calc(10px + var(--safe-b));gap:8px;
@@ -147,7 +147,7 @@
       transition:background .3s;
     }
 
-    /* 44px-class round buttons */
+    /* Round buttons */
     .cb{
       width:38px;height:38px;border-radius:50%;
       display:flex;align-items:center;justify-content:center;flex-shrink:0;
@@ -158,7 +158,7 @@
     .cb svg{display:block;}
     .csp{flex:1;}
 
-    /* Live badge — Apple-style */
+    /* Live badge */
     .live-pill{
       display:flex;align-items:center;gap:5px;
       padding:4px 9px 4px 8px;border-radius:6px;
@@ -215,17 +215,17 @@
     .qrow.sel{color:var(--ios-blue);font-weight:600;}
     .qrow svg{width:17px;height:17px;stroke:var(--ios-blue);fill:none;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round;}
     .sheet-cancel{
-  display:flex;align-items:center;justify-content:center;
-  width:100%;
-  margin-top:8px;height:50px;font-size:17px;font-weight:600;
-  color:var(--ios-blue);
-  border-radius:var(--ios-radius-sheet);
-  background:var(--ios-material);
-  -webkit-backdrop-filter:blur(40px) saturate(180%);backdrop-filter:blur(40px) saturate(180%);
-}
-.sheet-cancel:active{background:rgba(255,255,255,.1);}
+      display:flex;align-items:center;justify-content:center;
+      width:100%;
+      margin-top:8px;height:50px;font-size:17px;font-weight:600;
+      color:var(--ios-blue);
+      border-radius:var(--ios-radius-sheet);
+      background:var(--ios-material);
+      -webkit-backdrop-filter:blur(40px) saturate(180%);backdrop-filter:blur(40px) saturate(180%);
+    }
+    .sheet-cancel:active{background:rgba(255,255,255,.1);}
 
-    /* Error alert uses same .alert classes */
+    /* Error alert */
     #err-ov{position:absolute;inset:0;z-index:11;background:rgba(0,0,0,.75);-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);display:none;align-items:center;justify-content:center;padding:24px;}
     #err-ov.show{display:flex;}
   </style>
@@ -357,10 +357,15 @@ var JSON_URL  = 'https://raw.githubusercontent.com/drmlive/fancode-live-events/m
 var DEFAULT_Q = '1080p';
 
 /* ============================================================
-   PARAMS
+   PARAMS (Supports ?url=, ?=link, and ?id=)
    ============================================================ */
 var sp = new URLSearchParams(location.search);
-var matchId = sp.get('id')||'';
+var matchId = sp.get('id') || '';
+// Detect ?url= link or bare parameter like ?=http...
+var directUrl = sp.get('url') || sp.get('') || '';
+if (!directUrl && location.search.startsWith('?=')) {
+  directUrl = decodeURIComponent(location.search.substring(2));
+}
 
 /* ============================================================
    DOM
@@ -532,7 +537,6 @@ bvol.addEventListener('click', function(e){
 function syncVol(){
   isMuted=vid.muted;
   bvol.classList.toggle('is-muted', isMuted);
-  var waves=vico.querySelectorAll('.wave');
   if(isMuted){
     vico.innerHTML='<path d="M4 9v6h4l5 5V4L8 9H4z" fill="currentColor"/><line x1="16.5" y1="9.5" x2="22.5" y2="15.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><line x1="22.5" y1="9.5" x2="16.5" y2="15.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>';
   } else {
@@ -797,7 +801,53 @@ function resolve(data){
    ============================================================ */
 (function start(){
   showLoad();
-  if(!matchId){showErr('Missing match ID','URL: ?id=MATCH_ID (e.g., ?id=4249273_ENG)',false);return;}
+
+  // ✅ DIRECT M3U8 MODE
+  if(directUrl){
+    try{
+      var streams = {};
+
+      if(directUrl.includes('1080p')){
+        streams['1080p'] = directUrl;
+        streams['720p']  = directUrl.replace(/1080p/g,'720p');
+        streams['540p']  = directUrl.replace(/1080p/g,'540p');
+        streams['480p']  = directUrl.replace(/1080p/g,'480p');
+        streams['360p']  = directUrl.replace(/1080p/g,'360p');
+        streams['240p']  = directUrl.replace(/1080p/g,'240p');
+      } 
+      else if(directUrl.includes('720p')){
+        streams['720p']  = directUrl;
+        streams['540p']  = directUrl.replace(/720p/g,'540p');
+        streams['480p']  = directUrl.replace(/720p/g,'480p');
+        streams['360p']  = directUrl.replace(/720p/g,'360p');
+        streams['240p']  = directUrl.replace(/720p/g,'240p');
+      } 
+      else {
+        streams['1080p'] = directUrl;
+      }
+
+      qStreams = streams;
+
+      var url = streams['1080p'] || streams['720p'] || streams['540p'] || streams['480p'] || streams['360p'] || streams['240p'];
+
+      currentQ = streams['1080p'] ? '1080p' : (streams['720p'] ? '720p' : 'Auto');
+      qlbl.textContent = currentQ;
+      bq.style.display = '';
+
+      loadStream(url,[]);
+      return;
+
+    } catch(e){
+      showErr('Invalid M3U8 Link', e.message, false);
+      return;
+    }
+  }
+
+  // ❌ JSON / MATCH ID MODE
+  if(!matchId){
+    showErr('Missing Match or URL','Use ?url=YOUR_M3U8_LINK or ?id=MATCH_ID',false);
+    return;
+  }
 
   fetchJSON(JSON_URL).then(function(data){
     var r;
@@ -821,7 +871,11 @@ function resolve(data){
       bq.style.display='none';
       loadStream(r.url,[]);
     }
-  }).catch(function(e){showErr('Could not load data',e.message,true);retryTimer=setTimeout(start,8000);});
+  }).catch(function(e){
+    showErr('Could not load data',e.message,true);
+    retryTimer=setTimeout(start,8000);
+  });
+
 })();
 })();
 </script>
