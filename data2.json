@@ -1,32 +1,42 @@
-{
-  "title": "India Vs New Zealand - T20I",
-  "poster": "https://raw.githubusercontent.com/StarRy7c/public-data/main/photo_2026-10-23_13-12-12.jpg",
-  "message": "Select your preferred language and stream.",
-  "streams": [
-    {
-      "button_name": "HINDI - HD",
-      "button_link": "https://crixzylive.github.io/ind-vs-eng/?id=hindi"
-    },
-    {
-      "button_name": "ENG - HD",
-      "button_link": "https://crixzylive.github.io/ind-vs-eng/?id=eng"
-    },
-    {
-      "button_name": "TNT Sports",
-      "button_link": "https://crixzylive.github.io/ind-vs-eng/?id=tnt"
-    },
-    {
-      "button_name": "Tamil",
-      "button_link": "https://crixzylive.github.io/ind-vs-eng/?id=tamil"
-    },
-    {
-      "button_name": "Telugu",
-      "button_link": "https://crixzylive.github.io/ind-vs-eng/?id=telugu"
-    },
-    {
-      "button_name": "HINDI - All Devices",
-      "button_link": "https://crixzylive.github.io/ind-vs-eng/?id=ios"
-    }
-  ],
-  "footer_message": "Use in Chrome Browser"
-}
+[
+  {
+    "id": "ind_vs_nz_t20i",
+    "message": "Watch Live India vs New Zealand - T20I",
+    "image": "https://images.unsplash.com/photo-1540747913346-19e32dc3e97e?q=80&w=1000",
+    "tag": "LIVE NOW",
+    "description": "India vs New Zealand - T20 International",
+    "channels": [
+      {
+        "name": "HINDI - HD",
+        "link": "https://crixzylive.github.io/ind-vs-eng/?id=hindi",
+        "quality": "HD"
+      },
+      {
+        "name": "ENG - HD",
+        "link": "https://crixzylive.github.io/ind-vs-eng/?id=eng",
+        "quality": "HD"
+      },
+      {
+        "name": "TNT Sports",
+        "link": "https://crixzylive.github.io/ind-vs-eng/?id=tnt",
+        "quality": "English"
+      },
+      {
+        "name": "Tamil",
+        "link": "https://crixzylive.github.io/ind-vs-eng/?id=tamil",
+        "quality": "Tamil"
+      },
+      {
+        "name": "Telugu",
+        "link": "https://crixzylive.github.io/ind-vs-eng/?id=telugu",
+        "quality": "Telugu"
+      },
+      {
+        "name": "HINDI - All Devices",
+        "link": "https://crixzylive.github.io/ind-vs-eng/?id=ios",
+        "quality": "All Devices"
+      }
+    ],
+    "note": "Use in Chrome Browser"
+  }
+]
