@@ -1,1 +1,32 @@
-
+{
+  "title": "India Vs New Zealand - T20I",
+  "poster": "https://raw.githubusercontent.com/StarRy7c/public-data/main/photo_2026-10-23_13-12-12.jpg",
+  "message": "Select your preferred language and stream.",
+  "streams": [
+    {
+      "button_name": "HINDI - HD",
+      "button_link": "https://crixzylive.github.io/ind-vs-eng/?id=hindi"
+    },
+    {
+      "button_name": "ENG - HD",
+      "button_link": "https://crixzylive.github.io/ind-vs-eng/?id=eng"
+    },
+    {
+      "button_name": "TNT Sports",
+      "button_link": "https://crixzylive.github.io/ind-vs-eng/?id=tnt"
+    },
+    {
+      "button_name": "Tamil",
+      "button_link": "https://crixzylive.github.io/ind-vs-eng/?id=tamil"
+    },
+    {
+      "button_name": "Telugu",
+      "button_link": "https://crixzylive.github.io/ind-vs-eng/?id=telugu"
+    },
+    {
+      "button_name": "HINDI - All Devices",
+      "button_link": "https://crixzylive.github.io/ind-vs-eng/?id=ios"
+    }
+  ],
+  "footer_message": "Use in Chrome Browser"
+}
